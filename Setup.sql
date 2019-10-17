@@ -1,4 +1,13 @@
-USE shoeshoe;
+-- USE shoeshoe;
+
+-- CREATE TABLE users
+-- (
+--     id VARCHAR(255) NOT NULL,
+--     username VARCHAR(255) NOT NULL,
+--     email VARCHAR(255) NOT NULL UNIQUE,
+--     hash VARCHAR(255) NOT NULL,
+--     PRIMARY KEY (id)
+-- );
 
 -- CREATE TABLE brands
 -- (
@@ -26,7 +35,12 @@ USE shoeshoe;
 -- CREATE TABLE orders
 -- (
 --     id INT NOT NULL AUTO_INCREMENT,
---     customerName VARCHAR(255) NOT NULL,
+--     userId VARCHAR(255) NOT NULL,
+
+--     FOREIGN KEY(userId)
+--         REFERENCES users(id)
+--         ON DELETE CASCADE,
+
 --     PRIMARY KEY (id)
 -- );
 
@@ -35,8 +49,13 @@ USE shoeshoe;
 --   id INT NOT NULL AUTO_INCREMENT,
 --   shoeId VARCHAR(255) NOT NULL,
 --   orderId INT NOT NULL,
+--   userId VARCHAR(255) NOT NULL,
 
 --   INDEX (orderId),
+
+--     FOREIGN KEY(userId)
+--         REFERENCES users(id)
+--         ON DELETE CASCADE,
 
 --     FOREIGN KEY(shoeId) 
 --         REFERENCES shoes(id) 

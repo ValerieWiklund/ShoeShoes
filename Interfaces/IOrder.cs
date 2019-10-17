@@ -3,7 +3,7 @@ namespace ShoeStore.Interfaces
     public interface IOrder
     {
         int Id { get; set; }
-        string CustomerName { get; set; }
+        string UserId { get; set; }
 
     }
 }

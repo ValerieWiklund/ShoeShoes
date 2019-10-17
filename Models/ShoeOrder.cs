@@ -8,5 +8,6 @@ namespace ShoeStore.Models
         public int Id { get; set; }
         public int OrderId { get; set; }
         public string ShoeId { get; set; }
+        public string UserId { get; set; }
     }
 }

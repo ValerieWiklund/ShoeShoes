@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,6 +30,19 @@ namespace ShoeStore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //ADD USER AUTH through JWT
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Account/Login";
+                    options.Events.OnRedirectToLogin = (context) =>
+                      {
+                          context.Response.StatusCode = 401;
+                          return Task.CompletedTask;
+                      };
+                });
+
+
             services.AddControllers();
 
             //CONNECT TO DB
@@ -41,6 +55,8 @@ namespace ShoeStore
             services.AddTransient<BrandsRepository>();
             services.AddTransient<OrdersService>();
             services.AddTransient<OrdersRepository>();
+            services.AddTransient<AccountsService>();
+            services.AddTransient<AccountsRepository>();
         }
 
         private IDbConnection CreateDbConnection()
@@ -58,9 +74,8 @@ namespace ShoeStore
             }
 
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

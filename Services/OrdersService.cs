@@ -38,7 +38,7 @@ namespace ShoeStore.Services
         {
             Order order = _repo.Get(newData.Id);
             if (order == null) { throw new Exception("Invalid Id Homie"); }
-            order.CustomerName = newData.CustomerName;
+            order.UserId = newData.UserId;
             _repo.Edit(order);
             return order;
         }
@@ -50,31 +50,31 @@ namespace ShoeStore.Services
             return _repo.GetShoesByOrderId(orderId);
         }
 
-        public string Delete(int id)
+        public string Delete(int id, string userId)
         {
             Order order = _repo.Get(id);
-            if (order == null) { throw new Exception("Invalid Id Homie"); }
+            if (order == null || order.UserId != userId) { throw new Exception("Invalid Request"); }
             _repo.Delete(id);
             return "Successfully Booted";
         }
 
 
         //SECTION SHOE ORDERS
-        public string AddShoe(int id, string shoeId)
+        public string AddShoe(int id, string shoeId, string userId)
         {
             Order order = _repo.Get(id);
-            if (order == null) { throw new Exception("Invalid Order Id Homie"); }
+            if (order == null || order.UserId != userId) { throw new Exception("Invalid Order Id Homie"); }
             Shoe shoeToAdd = _shoeRepo.Get(shoeId);
             if (shoeToAdd == null) { throw new Exception("Invalid Shoe Id Homie"); }
             _repo.AddShoe(id, shoeId);
             return "Successfully added Shoe to Order";
         }
 
-        public string RemoveShoe(ShoeOrder so)
+        public string RemoveShoe(ShoeOrder so, string userId)
         {
-            ShoeOrder exists = _repo.GetShoeOrder(so);
-            if (exists == null) { throw new Exception("Invalid Info Homie"); }
-            _repo.RemoveShoeFromOrder(exists.Id);
+            ShoeOrder order = _repo.GetShoeOrder(so);
+            if (order == null || order.UserId != userId) { throw new Exception("Invalid Info Homie"); }
+            _repo.RemoveShoeFromOrder(order.Id);
             return "Successfully Booted";
         }
     }
